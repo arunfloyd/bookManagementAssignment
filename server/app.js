@@ -18,7 +18,7 @@ app.use(bodyParser.json());
 const allowedOrigins =
   process.env.NODE_ENV === "production"
     ? process.env.ALLOWED_ORIGINS_PRODUCTION.split(",")
-    : process.env.ALLOWED_ORIGINS_LOCAL.split(",");
+    : [...process.env.ALLOWED_ORIGINS_LOCAL.split(","), "http://localhost:5173"];
 
 const corsOptions = {
   origin: allowedOrigins, // This should be an array of allowed origins
