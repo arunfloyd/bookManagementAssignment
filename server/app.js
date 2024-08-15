@@ -15,7 +15,31 @@ const app = express();
 connectDB();
 app.use(cookieParser());
 app.use(bodyParser.json());
-app.use(cors());
+const allowedOrigins =
+  process.env.NODE_ENV === "production"
+    ? process.env.ALLOWED_ORIGINS_PRODUCTION.split(",")
+    : process.env.ALLOWED_ORIGINS_LOCAL.split(",");
+
+const hostedURL = process.env.ALLOWED_ORIGINS_PRODUCTION;
+const corsOptions = {
+  origin: allowedOrigins,
+  credentials: true,
+  optionsSuccessStatus: 200,
+};
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", `${hostedURL}`);
+  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept, Authorization"
+  );
+  res.header("Access-Control-Allow-Credentials", true);
+  if (req.method === "OPTIONS") {
+    return res.sendStatus(200);
+  }
+  next();
+});
+app.use(cors(corsOptions));
 app.use("/api/v1/language", languageRouter);
 app.use("/api/v1/author", authorRouter);
 app.use("/api/v1/book", bookRouter);
