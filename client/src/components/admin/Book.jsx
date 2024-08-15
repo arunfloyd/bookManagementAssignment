@@ -392,6 +392,8 @@ const Book = () => {
                 <th className="px-4 py-2 text-left">Cover Image</th>
                 <th className="px-4 py-2 text-left">Name</th>
                 <th className="px-4 py-2 text-left">Author</th>
+                <th className="px-4 py-2 text-left">Price</th>
+                <th className="px-4 py-2 text-left">Language</th>
                 <th className="px-4 py-2 text-left">Actions</th>
               </tr>
             </thead>
@@ -407,6 +409,8 @@ const Book = () => {
                   </td>
                   <td className="px-4 py-2">{item.name}</td>
                   <td className="px-4 py-2">{item.author.name}</td>
+                  <td className="px-4 py-2">{item.price}</td>
+                  <td className="px-4 py-2">{item.language.name}</td>
                   <td className="px-4 py-2">
                     <button
                       className="ml-2 px-2 py-1 bg-yellow-500 text-white rounded"
