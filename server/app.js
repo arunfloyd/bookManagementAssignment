@@ -25,6 +25,8 @@ const corsOptions = {
   credentials: true,
   optionsSuccessStatus: 200,
 };
+console.log('Allowed Origins:', allowedOrigins);
+
 
 app.use(cors(corsOptions));
 app.use("/api/v1/language", languageRouter);
