@@ -1,18 +1,20 @@
-
-
-
 import Header from "./Header";
 import { API } from "../../utils/Api";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const Language = () => {
   const [languageList, setLanguageList] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [currentLanguage, setCurrentLanguage] = useState({ name: "", code: "" });
+  const [currentLanguage, setCurrentLanguage] = useState({
+    name: "",
+    code: "",
+  });
   const [isEditing, setIsEditing] = useState(false);
   const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
   const [languageToDelete, setLanguageToDelete] = useState(null);
   const [statusMessage, setStatusMessage] = useState("");
+  const navigate = useNavigate();
 
   const getLanguageList = async () => {
     const response = await API.getAllLanguages();
@@ -31,7 +33,9 @@ const Language = () => {
   const handleDelete = async () => {
     try {
       await API.deleteLanguage(languageToDelete._id);
-      setLanguageList(languageList.filter((lang) => lang._id !== languageToDelete._id));
+      setLanguageList(
+        languageList.filter((lang) => lang._id !== languageToDelete._id)
+      );
       setIsDeleteConfirmOpen(false);
       setStatusMessage("Language deleted successfully");
       setTimeout(() => setStatusMessage(""), 3000);
@@ -54,6 +58,9 @@ const Language = () => {
     setIsModalOpen(true);
   };
 
+  const handleGo = () => {
+    navigate("/dashboard");
+  };
   const handleSave = async () => {
     try {
       if (isEditing) {
@@ -85,6 +92,12 @@ const Language = () => {
             </div>
           )}
           <button
+            className="mb-6 px-4 py-2 bg-yellow-300-500 text-white rounded hover:bg-yellow-600 transition-colors"
+            onClick={handleGo}
+          >
+            Go Back
+          </button>
+          <button
             className="mb-6 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"
             onClick={handleAdd}
           >
@@ -102,7 +115,10 @@ const Language = () => {
               <tbody>
                 {languageList &&
                   languageList.map((item, index) => (
-                    <tr key={index} className={index % 2 === 0 ? "bg-gray-50" : "bg-white"}>
+                    <tr
+                      key={index}
+                      className={index % 2 === 0 ? "bg-gray-50" : "bg-white"}
+                    >
                       <td className="px-4 py-2">{item.name}</td>
                       <td className="px-4 py-2">{item.code}</td>
                       <td className="px-4 py-2 text-right">
@@ -173,7 +189,9 @@ const Language = () => {
         <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50">
           <div className="bg-white p-6 rounded-lg shadow-xl w-full max-w-md">
             <h3 className="text-xl font-semibold mb-4">Confirm Deletion</h3>
-            <p className="mb-4">Are you sure you want to delete this language?</p>
+            <p className="mb-4">
+              Are you sure you want to delete this language?
+            </p>
             <div className="flex justify-end">
               <button
                 className="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600 transition-colors mr-2"
