@@ -1,8 +1,7 @@
-
-
 import { useEffect, useState } from "react";
 import { API } from "../../utils/Api";
 import Header from "./Header";
+import Shimmer from "../Shimmer";
 
 const Book = () => {
   const [bookList, setBookList] = useState([]);
@@ -20,6 +19,7 @@ const Book = () => {
   const [authors, setAuthors] = useState([]);
   const [languages, setLanguages] = useState([]);
   const [previewImage, setPreviewImage] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   const getAllBooks = async () => {
     const response = await API.getAllBooks();
@@ -37,9 +37,15 @@ const Book = () => {
   };
 
   useEffect(() => {
-    getAllBooks();
-    getAllAuthors();
-    getAllLanguages();
+    try {
+      getAllBooks();
+      getAllAuthors();
+      getAllLanguages();
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setLoading(false);
+    }
   }, []);
 
   const handleFileChange = (e) => {
@@ -102,6 +108,7 @@ const Book = () => {
     await API.deleteBook(bookId);
     getAllBooks();
   };
+  if (loading) return <Shimmer/>
 
   return (
     <div className="flex flex-col min-h-screen">
