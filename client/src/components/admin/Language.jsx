@@ -58,9 +58,7 @@ const Language = () => {
     setIsModalOpen(true);
   };
 
-  const handleGo = () => {
-    navigate("/dashboard");
-  };
+ 
   const handleSave = async () => {
     try {
       if (isEditing) {
@@ -91,12 +89,7 @@ const Language = () => {
               {statusMessage}
             </div>
           )}
-          <button
-            className="mb-6 px-4 py-2 bg-yellow-300-500 text-white rounded hover:bg-yellow-600 transition-colors"
-            onClick={handleGo}
-          >
-            Go Back
-          </button>
+        
           <button
             className="mb-6 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"
             onClick={handleAdd}
