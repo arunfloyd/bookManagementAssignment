@@ -2,6 +2,7 @@ const asyncHandler = require("express-async-handler");
 const Book = require("../models/bookModel");
 const { cloudinary } = require("../config/cloudinary");
 
+// Add Book
 const addBook = asyncHandler(async (req, res) => {
   try {
     const { name, author, description, price, language, publishedYear } =
@@ -24,8 +25,6 @@ const addBook = asyncHandler(async (req, res) => {
         error: uploadError.message,
       });
     }
-
-   
 
     try {
       const newBook = await Book.create({
@@ -52,6 +51,8 @@ const addBook = asyncHandler(async (req, res) => {
   }
 });
 
+
+// Get All Books
 const getAllBook = asyncHandler(async (req, res) => {
   try {
     const books = await Book.find({})
@@ -63,6 +64,7 @@ const getAllBook = asyncHandler(async (req, res) => {
   }
 });
 
+// Get A Book
 const getBookById = asyncHandler(async (req, res) => {
   try {
     const book = await Book.findById(req.params.id)
@@ -79,9 +81,11 @@ const getBookById = asyncHandler(async (req, res) => {
   }
 });
 
+//Update Book
 const updateBook = asyncHandler(async (req, res) => {
   try {
-    const { name, author, description, price, language, publishedYear } = req.body;
+    const { name, author, description, price, language, publishedYear } =
+      req.body;
     const coverImage = req.file ? req.file.path : null;
     const book = await Book.findById(req.params.id);
 
@@ -107,7 +111,7 @@ const updateBook = asyncHandler(async (req, res) => {
       let result;
       try {
         result = await cloudinary.uploader.upload(coverImage);
-        book.coverImage = result.secure_url; 
+        book.coverImage = result.secure_url;
       } catch (uploadError) {
         console.error("Error during Cloudinary upload:", uploadError);
         return res.status(500).json({
@@ -132,7 +136,7 @@ const updateBook = asyncHandler(async (req, res) => {
   }
 });
 
-
+//Delete Book
 const deleteBook = asyncHandler(async (req, res) => {
   try {
     const book = await Book.findById(req.params.id);
@@ -149,6 +153,7 @@ const deleteBook = asyncHandler(async (req, res) => {
   }
 });
 
+// Search book by id
 const searchBooks = asyncHandler(async (req, res) => {
   try {
     const { query, sortField, sortOrder } = req.query;
@@ -158,7 +163,7 @@ const searchBooks = asyncHandler(async (req, res) => {
 
     const sort = {};
     if (sortField && sortOrder) {
-      sort[sortField] = sortOrder === 'desc' ? -1 : 1;
+      sort[sortField] = sortOrder === "desc" ? -1 : 1;
     } else {
       sort.price = 1;
     }
@@ -169,41 +174,42 @@ const searchBooks = asyncHandler(async (req, res) => {
       filter = {
         $or: [
           { name: { $regex: query, $options: "i" } },
-          { description: { $regex: query, $options: "i" } }
-        ]
+          { description: { $regex: query, $options: "i" } },
+        ],
       };
     }
-
 
     let books = await Book.aggregate([
       {
         $lookup: {
-          from: 'authors',
-          localField: 'author',
-          foreignField: '_id',
-          as: 'authorData'
-        }
+          from: "authors",
+          localField: "author",
+          foreignField: "_id",
+          as: "authorData",
+        },
       },
       {
         $lookup: {
-          from: 'languages',
-          localField: 'language',
-          foreignField: '_id',
-          as: 'languageData'
-        }
+          from: "languages",
+          localField: "language",
+          foreignField: "_id",
+          as: "languageData",
+        },
       },
       {
-        $match: query ? {
-          $or: [
-            { name: { $regex: query, $options: "i" } },
-            { description: { $regex: query, $options: "i" } },
-            { 'authorData.name': { $regex: query, $options: "i" } },
-            { 'languageData.name': { $regex: query, $options: "i" } }
-          ]
-        } : {}
+        $match: query
+          ? {
+              $or: [
+                { name: { $regex: query, $options: "i" } },
+                { description: { $regex: query, $options: "i" } },
+                { "authorData.name": { $regex: query, $options: "i" } },
+                { "languageData.name": { $regex: query, $options: "i" } },
+              ],
+            }
+          : {},
       },
       {
-        $sort: sort
+        $sort: sort,
       },
       {
         $project: {
@@ -212,16 +218,14 @@ const searchBooks = asyncHandler(async (req, res) => {
           price: 1,
           publishedYear: 1,
           coverImage: 1,
-          author: { $arrayElemAt: ['$authorData', 0] },
-          language: { $arrayElemAt: ['$languageData', 0] }
-        }
-      }
+          author: { $arrayElemAt: ["$authorData", 0] },
+          language: { $arrayElemAt: ["$languageData", 0] },
+        },
+      },
     ]);
-
 
     const total = books.length;
     books = books.slice(skip, skip + limit);
-
 
     res.json({
       books: books,
@@ -231,12 +235,15 @@ const searchBooks = asyncHandler(async (req, res) => {
     });
   } catch (error) {
     console.error("Error in searchBooks:", error);
-    res.status(500).json({ message: "Server Error", error: error.message, stack: error.stack });
+    res
+      .status(500)
+      .json({
+        message: "Server Error",
+        error: error.message,
+        stack: error.stack,
+      });
   }
 });
-
-
-
 
 module.exports = {
   addBook,

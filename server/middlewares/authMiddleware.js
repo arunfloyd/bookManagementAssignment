@@ -2,6 +2,7 @@ const jwt = require("jsonwebtoken");
 const asyncHandler = require("express-async-handler");
 const User = require("../models/userModel");
 
+// Authentication Middleware
 const authenticateUser = asyncHandler(async (req, res, next) => {
   const token = req.cookies.userToken;
 

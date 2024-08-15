@@ -2,6 +2,8 @@ const Language = require("../models/languageModel");
 const Book = require("../models/bookModel");
 const asyncHandler = require("express-async-handler");
 
+
+// Add Language
 const addLanguage = asyncHandler(async (req, res) => {
   try {
     const { name, code } = req.body;
@@ -28,6 +30,8 @@ const addLanguage = asyncHandler(async (req, res) => {
   }
 });
 
+
+// Get All Languages
 const getAllLanguages = asyncHandler(async (req, res) => {
   try {
     const languages = await Language.find({});
@@ -37,6 +41,8 @@ const getAllLanguages = asyncHandler(async (req, res) => {
   }
 });
 
+
+// Get Language By Id
 const getLanguageById = asyncHandler(async (req, res) => {
   try {
     const language = await Language.findById(req.params.id);
@@ -49,6 +55,8 @@ const getLanguageById = asyncHandler(async (req, res) => {
   }
 });
 
+
+// Update Language
 const updateLanguage = asyncHandler(async (req, res) => {
   try {
     const { name, code } = req.body;
@@ -81,6 +89,8 @@ const updateLanguage = asyncHandler(async (req, res) => {
   }
 });
 
+
+// Delete Language
 const deleteLanguage = asyncHandler(async (req, res) => {
   try {
     const language = await Language.findById(req.params.id);

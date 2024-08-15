@@ -3,6 +3,8 @@ const { generateToken } = require("../config/generateToken");
 const User = require("../models/userModel");
 const bcrypt = require("bcrypt");
 
+
+// Admin Login
 const login = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
   const user = await User.findOne({ email });
@@ -15,6 +17,8 @@ const login = asyncHandler(async (req, res) => {
   res.json({ user });
 });
 
+// Admin Logout 
+
 const logout = asyncHandler(async (req, res) => {
   res.cookie("userToken", "", {
     httpOnly: true,
@@ -25,6 +29,9 @@ const logout = asyncHandler(async (req, res) => {
 
   res.json({ message: "User logged out successfully" });
 });
+
+// Admin New Password 
+
 
 const newPassword = asyncHandler(async (req, res) => {
   const { password } = req.body;

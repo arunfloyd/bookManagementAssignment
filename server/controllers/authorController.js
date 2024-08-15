@@ -2,6 +2,8 @@ const asyncHandler = require("express-async-handler");
 const Author = require("../models/authorModel");
 const Book = require("../models/bookModel");
 
+
+// Add Author name
 const addAuthor = asyncHandler(async (req, res) => {
   try {
     const { name } = req.body;
@@ -23,6 +25,7 @@ const addAuthor = asyncHandler(async (req, res) => {
   }
 });
 
+// Get All Author 
 const getAllAuthor = asyncHandler(async (req, res) => {
   try {
     const authors = await Author.find({});
@@ -32,6 +35,8 @@ const getAllAuthor = asyncHandler(async (req, res) => {
   }
 });
 
+
+// Get A Author 
 const getAuthorById = asyncHandler(async (req, res) => {
   try {
     const author = await Author.findById(req.params.id);
@@ -44,6 +49,7 @@ const getAuthorById = asyncHandler(async (req, res) => {
   }
 });
 
+// Update Author 
 const updateAuthor = asyncHandler(async (req, res) => {
   try {
     const { name } = req.body;
@@ -76,6 +82,7 @@ const updateAuthor = asyncHandler(async (req, res) => {
   }
 });
 
+// Delete Author 
 const deleteAuthor = asyncHandler(async (req, res) => {
   try {
     const author = await Author.findById(req.params.id);

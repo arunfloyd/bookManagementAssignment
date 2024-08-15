@@ -4,6 +4,8 @@ const User = require("../models/userModel");
 const otpGenerator = require("otp-generator");
 const bcrypt = require("bcrypt");
 const nodemailer = require("nodemailer");
+
+// Send OTP For reset password
 const sendOtp = asyncHandler(async (req, res) => {
   try {
     const getEmail = await User.findOne();
@@ -62,9 +64,11 @@ const sendOtp = asyncHandler(async (req, res) => {
     return res.sendStatus(400);
   }
 });
+
+// Send Mail Function content
 const sendMail = async (transporter, email) => {
   await transporter.sendMail({
-    from: '"Fusion Furni 👻" <foo@example.com>',
+    from: '"Book Management 👻" <bookmanagement@yahoo.com>',
     to: email.to,
     subject: email.subject,
     text: email.text,
@@ -72,6 +76,7 @@ const sendMail = async (transporter, email) => {
   });
 };
 
+//Mailing confirmation for mail
 const sendEmail = async (email) => {
   const transporter = nodemailer.createTransport({
     host: "smtp.gmail.com",
@@ -86,6 +91,7 @@ const sendEmail = async (email) => {
   await sendMail(transporter, email);
 };
 
+// Verify OTP ENtered
 const verifyOtp = asyncHandler(async (req, res) => {
   const { otp } = req.body;
 
