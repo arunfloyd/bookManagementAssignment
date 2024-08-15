@@ -20,25 +20,12 @@ const allowedOrigins =
     ? process.env.ALLOWED_ORIGINS_PRODUCTION.split(",")
     : process.env.ALLOWED_ORIGINS_LOCAL.split(",");
 
-const hostedURL = process.env.ALLOWED_ORIGINS_PRODUCTION;
 const corsOptions = {
-  origin: allowedOrigins,
+  origin: allowedOrigins, // This should be an array of allowed origins
   credentials: true,
   optionsSuccessStatus: 200,
 };
-app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", 'https://book-management-assignment.vercel.app');
-  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-  res.header(
-    "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept, Authorization"
-  );
-  res.header("Access-Control-Allow-Credentials", true);
-  if (req.method === "OPTIONS") {
-    return res.sendStatus(200);
-  }
-  next();
-});
+
 app.use(cors(corsOptions));
 app.use("/api/v1/language", languageRouter);
 app.use("/api/v1/author", authorRouter);
