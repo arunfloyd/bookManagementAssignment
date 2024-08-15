@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { API } from "../../utils/Api";
 import Header from "./Header";
+import Shimmer from "../Shimmer";
 
 const Author = () => {
   const [authorList, setAuthorList] = useState([]);
@@ -10,20 +11,29 @@ const Author = () => {
   const [statusMessage, setStatusMessage] = useState("");
   const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
   const [authorToDelete, setAuthorToDelete] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     getAuthorList();
   }, []);
 
   const getAuthorList = async () => {
-    const response = await API.getAllAuthors();
-    setAuthorList(response);
+    try {
+      const response = await API.getAllAuthors();
+      setAuthorList(response);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleDelete = async () => {
     try {
       await API.deleteAuthor(authorToDelete._id);
-      setAuthorList(authorList.filter((auth) => auth._id !== authorToDelete._id));
+      setAuthorList(
+        authorList.filter((auth) => auth._id !== authorToDelete._id)
+      );
       setIsDeleteConfirmOpen(false);
       setStatusMessage("Author deleted successfully");
       setTimeout(() => setStatusMessage(""), 3000);
@@ -62,13 +72,14 @@ const Author = () => {
       }
       setIsModalOpen(false);
       getAuthorList();
-      setTimeout(() => setStatusMessage(""), 3000); 
+      setTimeout(() => setStatusMessage(""), 3000);
     } catch (error) {
       console.error(error);
       setStatusMessage("Error saving author");
-      setTimeout(() => setStatusMessage(""), 3000); 
+      setTimeout(() => setStatusMessage(""), 3000);
     }
   };
+  if (loading) return <Shimmer/>
 
   return (
     <div className="min-h-screen bg-gray-100">
@@ -92,28 +103,29 @@ const Author = () => {
               <span>Name</span>
               <span className="text-right">Actions</span>
             </div>
-            {authorList && authorList.map((author) => (
-              <div
-                key={author._id}
-                className="grid grid-cols-2 gap-4 border-b border-gray-200 p-4 items-center"
-              >
-                <span>{author.name}</span>
-                <div className="flex justify-end space-x-2">
-                  <button
-                    className="px-2 py-1 bg-green-500 text-white rounded hover:bg-green-600 transition-colors"
-                    onClick={handleEdit(author)}
-                  >
-                    Edit
-                  </button>
-                  <button
-                    className="px-2 py-1 bg-red-500 text-white rounded hover:bg-red-600 transition-colors"
-                    onClick={() => handleDeleteConfirm(author)}
-                  >
-                    Delete
-                  </button>
+            {authorList &&
+              authorList.map((author) => (
+                <div
+                  key={author._id}
+                  className="grid grid-cols-2 gap-4 border-b border-gray-200 p-4 items-center"
+                >
+                  <span>{author.name}</span>
+                  <div className="flex justify-end space-x-2">
+                    <button
+                      className="px-2 py-1 bg-green-500 text-white rounded hover:bg-green-600 transition-colors"
+                      onClick={handleEdit(author)}
+                    >
+                      Edit
+                    </button>
+                    <button
+                      className="px-2 py-1 bg-red-500 text-white rounded hover:bg-red-600 transition-colors"
+                      onClick={() => handleDeleteConfirm(author)}
+                    >
+                      Delete
+                    </button>
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))}
           </div>
         </div>
 
@@ -154,7 +166,9 @@ const Author = () => {
           <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50">
             <div className="bg-white p-6 rounded-lg shadow-xl w-full max-w-md">
               <h3 className="text-xl font-semibold mb-4">Confirm Deletion</h3>
-              <p className="mb-4">Are you sure you want to delete this author?</p>
+              <p className="mb-4">
+                Are you sure you want to delete this author?
+              </p>
               <div className="flex justify-end">
                 <button
                   className="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600 transition-colors mr-2"
