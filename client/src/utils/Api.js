@@ -1,5 +1,7 @@
 import axios from "axios";
-const API_URL = "http://localhost:3000/api/v1";
+const API_URL = "https://book-management-assignment.vercel.app/api/v1";
+
+// Add your own API keys here
 
 const API = {
   //Admin Login Routes
@@ -27,6 +29,7 @@ const API = {
       const response = await axios.get(`${API_URL}/resetPassword`);
       console.log(response);
       return response.data;
+
     } catch (err) {
       throw new Error(err.message);
     }
