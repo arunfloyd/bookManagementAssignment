@@ -15,7 +15,6 @@ const Author = () => {
     getAuthorList();
   }, []);
 
-  // Fetches the list of authors
   const getAuthorList = async () => {
     const response = await API.getAllAuthors();
     setAuthorList(response);
@@ -63,11 +62,11 @@ const Author = () => {
       }
       setIsModalOpen(false);
       getAuthorList();
-      setTimeout(() => setStatusMessage(""), 3000); // Clear message after 3 seconds
+      setTimeout(() => setStatusMessage(""), 3000); 
     } catch (error) {
       console.error(error);
       setStatusMessage("Error saving author");
-      setTimeout(() => setStatusMessage(""), 3000); // Clear message after 3 seconds
+      setTimeout(() => setStatusMessage(""), 3000); 
     }
   };
 
