@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import { API } from "../../utils/Api";
 import { Link } from "react-router-dom";
+import Shimmer from "../Shimmer";
 
 const Home = () => {
   const [listOfBooks, setListOfBooks] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [sortField, setSortField] = useState("price");
   const [sortOrder, setSortOrder] = useState("asc");
@@ -19,7 +19,7 @@ const Home = () => {
         throw new Error("Failed to load books");
       }
     } catch (err) {
-      setError(err.message);
+      console.log(err)
     } finally {
       setLoading(false);
     }
@@ -39,8 +39,7 @@ const Home = () => {
     setSortOrder(order);
   };
 
-  if (loading) return <p className="text-center text-white text-2xl">Loading...</p>;
-  if (error) return <p className="text-center text-red-500 text-2xl">Error: {error}</p>;
+  if (loading) return <Shimmer/>
 
   return (
     <div className="min-h-screen flex flex-col bg-cover bg-center bg-fixed"
