@@ -5,13 +5,11 @@ const bcrypt = require("bcrypt");
 
 const login = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
-  console.log(password, 231);
   const user = await User.findOne({ email });
 
   if (!user || !(await bcrypt.compare(password, user.password))) {
     return res.status(401).json({ message: "Invalid email or password" });
   }
-  console.log("hihu");
 
   generateToken(res, user._id);
   res.json({ user });
@@ -30,7 +28,6 @@ const logout = asyncHandler(async (req, res) => {
 
 const newPassword = asyncHandler(async (req, res) => {
   const { password } = req.body;
-  console.log(password, "pass");
 
   const user = await User.findOne(); 
 
@@ -38,7 +35,6 @@ const newPassword = asyncHandler(async (req, res) => {
     return res.status(401).json({ message: "User not found" });
   }
 
-  console.log(user);
   const saltRounds = 10;
   const hashedPassword = await bcrypt.hash(password, saltRounds);
   user.password = hashedPassword;

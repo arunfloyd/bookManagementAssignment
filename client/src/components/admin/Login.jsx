@@ -40,7 +40,6 @@ const Login = () => {
   const handleForgotPassword = async () => {
     await API.sendOtp();
     navigate("/verifyOtp");
-    console.log("Forgot password clicked");
   };
 
   return (

@@ -6,21 +6,17 @@ const addBook = asyncHandler(async (req, res) => {
   try {
     const { name, author, description, price, language, publishedYear } =
       req.body;
-    console.log(name, 1);
 
     const coverImage = req.file ? req.file.path : null;
-    console.log(coverImage, 2);
 
     const bookExists = await Book.findOne({ name });
     if (bookExists) {
       return res.status(400).json({ message: "Book already exists" });
     }
-    console.log(3);
 
     let result;
     try {
       result = await cloudinary.uploader.upload(req.file.path);
-      console.log(result, "Image uploaded to Cloudinary");
     } catch (uploadError) {
       console.error("Error during Cloudinary upload:", uploadError);
       return res.status(500).json({
@@ -29,18 +25,7 @@ const addBook = asyncHandler(async (req, res) => {
       });
     }
 
-    console.log(
-      {
-        name,
-        author,
-        description,
-        price,
-        language,
-        publishedYear,
-        coverImage: result.secure_url,
-      },
-      "Data passed to Book.create()"
-    );
+   
 
     try {
       const newBook = await Book.create({
@@ -52,7 +37,6 @@ const addBook = asyncHandler(async (req, res) => {
         publishedYear,
         coverImage: result.secure_url,
       });
-      console.log("New book created:", newBook);
       res
         .status(201)
         .json({ message: "Book added successfully", book: newBook });
@@ -70,7 +54,6 @@ const addBook = asyncHandler(async (req, res) => {
 
 const getAllBook = asyncHandler(async (req, res) => {
   try {
-    console.log("call reached")
     const books = await Book.find({})
       .populate("author", "name")
       .populate("language", "name");
@@ -124,7 +107,6 @@ const updateBook = asyncHandler(async (req, res) => {
       let result;
       try {
         result = await cloudinary.uploader.upload(coverImage);
-        console.log(result, "Image uploaded to Cloudinary");
         book.coverImage = result.secure_url; 
       } catch (uploadError) {
         console.error("Error during Cloudinary upload:", uploadError);
@@ -153,7 +135,6 @@ const updateBook = asyncHandler(async (req, res) => {
 
 const deleteBook = asyncHandler(async (req, res) => {
   try {
-    console.log(req.params.id, 22);
     const book = await Book.findById(req.params.id);
 
     if (!book) {
@@ -170,7 +151,6 @@ const deleteBook = asyncHandler(async (req, res) => {
 
 const searchBooks = asyncHandler(async (req, res) => {
   try {
-    console.log("Search reached", req.query);
     const { query, sortField, sortOrder } = req.query;
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 10;
@@ -194,7 +174,6 @@ const searchBooks = asyncHandler(async (req, res) => {
       };
     }
 
-    console.log("Initial Filter:", JSON.stringify(filter, null, 2));
 
     let books = await Book.aggregate([
       {
@@ -239,12 +218,10 @@ const searchBooks = asyncHandler(async (req, res) => {
       }
     ]);
 
-    console.log("Books found:", books.length);
 
     const total = books.length;
     books = books.slice(skip, skip + limit);
 
-    console.log("Sample book:", JSON.stringify(books[0], null, 2));
 
     res.json({
       books: books,

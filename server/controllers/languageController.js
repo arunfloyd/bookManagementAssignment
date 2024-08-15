@@ -5,7 +5,6 @@ const asyncHandler = require("express-async-handler");
 const addLanguage = asyncHandler(async (req, res) => {
   try {
     const { name, code } = req.body;
-    console.log("123", name);
     const existingLanguage = await Language.findOne({
       $or: [{ name }, { code }],
     });

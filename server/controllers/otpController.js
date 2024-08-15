@@ -8,7 +8,6 @@ const sendOtp = asyncHandler(async (req, res) => {
   try {
     const getEmail = await User.findOne();
     const emailId = getEmail.email;
-    console.log(emailId);
     const otp = otpGenerator.generate(6, {
       digits: true,
       lowerCaseAlphabets: false,
@@ -52,7 +51,6 @@ const sendOtp = asyncHandler(async (req, res) => {
     setTimeout(async () => {
       try {
         await Otp.findByIdAndDelete(savedOtp._id);
-        console.log(`OTP for email ${emailId} deleted after 59 seconds`);
       } catch (deleteError) {
         console.error("Error deleting OTP:", deleteError);
       }
@@ -75,7 +73,6 @@ const sendMail = async (transporter, email) => {
 };
 
 const sendEmail = async (email) => {
-  console.log(process.env.NODEMAILER_USERNAME, "ded");
   const transporter = nodemailer.createTransport({
     host: "smtp.gmail.com",
     port: 465,
@@ -91,7 +88,6 @@ const sendEmail = async (email) => {
 
 const verifyOtp = asyncHandler(async (req, res) => {
   const { otp } = req.body;
-  console.log(otp ,"otp")
 
   try {
     if (!otp) {
