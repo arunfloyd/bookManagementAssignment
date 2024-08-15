@@ -272,13 +272,11 @@
 // };
 
 // export default Book;
-
 import { useEffect, useState } from "react";
 import { API } from "../../utils/Api";
 import Header from "./Header";
 
 const Book = () => {
-  // State declarations remain unchanged...
   const [bookList, setBookList] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentBook, setCurrentBook] = useState({
@@ -295,7 +293,6 @@ const Book = () => {
   const [languages, setLanguages] = useState([]);
   const [previewImage, setPreviewImage] = useState(null);
 
-  // Fetch all books, authors, and languages
   const getAllBooks = async () => {
     const response = await API.getAllBooks();
     setBookList(response);
@@ -311,23 +308,18 @@ const Book = () => {
     setLanguages(response);
   };
 
-  // Fetching functions remain unchanged...
-
   useEffect(() => {
     getAllBooks();
     getAllAuthors();
     getAllLanguages();
   }, []);
 
-  // Event handlers remain unchanged...
-  // Handle file input change for cover image
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     setCurrentBook({ ...currentBook, coverImage: file });
-    setPreviewImage(URL.createObjectURL(file)); // Preview the image
+    setPreviewImage(URL.createObjectURL(file));
   };
 
-  // Handle form submission for adding/updating a book
   const handleSave = async () => {
     const formData = new FormData();
     formData.append("name", currentBook.name);
@@ -348,7 +340,6 @@ const Book = () => {
     getAllBooks();
   };
 
-  // Handle opening the modal for adding a new book
   const handleAdd = () => {
     setCurrentBook({
       _id: null,
@@ -364,7 +355,6 @@ const Book = () => {
     setIsModalOpen(true);
   };
 
-  // Handle editing an existing book
   const handleEdit = (book) => {
     setCurrentBook({
       _id: book._id,
@@ -376,11 +366,10 @@ const Book = () => {
       publishedYear: book.publishedYear,
       coverImage: book.coverImage,
     });
-    setPreviewImage(book.coverImage); // Show existing cover image as preview
+    setPreviewImage(book.coverImage);
     setIsModalOpen(true);
   };
 
-  // Handle deleting a book
   const handleDelete = async (bookId) => {
     await API.deleteBook(bookId);
     getAllBooks();
@@ -388,59 +377,56 @@ const Book = () => {
 
   return (
     <div className="flex flex-col min-h-screen">
-    <Header />
-    <main className="flex-grow p-4">
-      <button
-        className="mb-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"
-        onClick={handleAdd}
-      >
-        Add Book
-      </button>
-      <div className="overflow-x-auto">
-        <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-50">
-            <tr>
-              <th>Name</th>
-              <th>Description</th>
-              <th>Price</th>
-              <th>Author</th>
-              <th>Language</th>
-              <th>Year</th>
-              <th>Cover</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
-            {bookList.map((item, index) => (
-              <tr key={index}>
-                <td>{item.name}</td>
-                <td>{item.description}</td>
-                <td>{item.price}</td>
-                <td>{item.author.name}</td>
-                <td>{item.language.name}</td>
-                <td>{item.publishedYear}</td>
-                <td><img src={item.coverImage} alt="Cover" width="50" /></td>
-                <td>
-                  <button
-                    className="ml-2 px-2 py-1 bg-yellow-500 text-white rounded"
-                    onClick={() => handleEdit(item)}
-                  >
-                    Edit
-                  </button>
-                  <button
-                    className="ml-2 px-2 py-1 bg-red-500 text-white rounded"
-                    onClick={() => handleDelete(item._id)}
-                  >
-                    Delete
-                  </button>
-                </td>
+      <Header />
+      <main className="flex-grow p-4">
+        <button
+          className="mb-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"
+          onClick={handleAdd}
+        >
+          Add Book
+        </button>
+        <div className="overflow-x-auto">
+          <table className="min-w-full divide-y divide-gray-200">
+            <thead className="bg-gray-50">
+              <tr>
+                <th className="px-4 py-2 text-left">Cover Image</th>
+                <th className="px-4 py-2 text-left">Name</th>
+                <th className="px-4 py-2 text-left">Author</th>
+                <th className="px-4 py-2 text-left">Actions</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+            </thead>
+            <tbody className="bg-white divide-y divide-gray-200">
+              {bookList.map((item) => (
+                <tr key={item._id}>
+                  <td className="px-4 py-2">
+                    <img
+                      src={item.coverImage}
+                      alt="Cover"
+                      className="w-24 h-32 object-cover"
+                    />
+                  </td>
+                  <td className="px-4 py-2">{item.name}</td>
+                  <td className="px-4 py-2">{item.author.name}</td>
+                  <td className="px-4 py-2">
+                    <button
+                      className="ml-2 px-2 py-1 bg-yellow-500 text-white rounded"
+                      onClick={() => handleEdit(item)}
+                    >
+                      Edit
+                    </button>
+                    <button
+                      className="ml-2 px-2 py-1 bg-red-500 text-white rounded"
+                      onClick={() => handleDelete(item._id)}
+                    >
+                      Delete
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
 
-        {/* Modal remains unchanged... */}
         {isModalOpen && (
           <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50">
             <div className="bg-white p-6 rounded shadow-lg w-96">
@@ -537,7 +523,11 @@ const Book = () => {
                   onChange={handleFileChange}
                 />
                 {previewImage && (
-                  <img src={previewImage} alt="Cover Preview" width="100" />
+                  <img
+                    src={previewImage}
+                    alt="Cover Preview"
+                    className="w-24 h-32 object-cover"
+                  />
                 )}
 
                 <div className="flex justify-end">
