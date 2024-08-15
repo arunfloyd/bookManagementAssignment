@@ -84,7 +84,7 @@ const Home = () => {
                   <h2 className="text-xl sm:text-2xl font-bold mb-2 sm:mb-4 text-center">{book.name}</h2>
                   <p className="mb-1 sm:mb-2">Author: {book.author.name}</p>
                   <p className="mb-1 sm:mb-2">Language: {book.language.name}</p>
-                  <p className="mb-1 sm:mb-2">Price: ${book.price}</p>
+                  <p className="mb-1 sm:mb-2">Price: ₹{book.price}</p>
                   <p className="mb-1 sm:mb-2">Published Year: {book.publishedYear}</p>
                   <p className="text-xs sm:text-sm text-center">{book.description}</p>
                 </div>
