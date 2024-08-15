@@ -5,24 +5,34 @@ const bcrypt = require("bcrypt");
 
 const login = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
-  console.log(password, 231);
   const user = await User.findOne({ email });
 
   if (!user || !(await bcrypt.compare(password, user.password))) {
     return res.status(401).json({ message: "Invalid email or password" });
   }
-  console.log("hihu");
 
   generateToken(res, user._id);
   res.json({ user });
 });
 
-const logout = asyncHandler(async (req, res) => {
-  res.cookie("userToken", "", {
+const generateToken = (res, userId) => {
+  const token = jwt.sign({ userId }, process.env.JWT_SECRET, {
+    expiresIn: '30d',
+  });
+
+  res.cookie('userToken', token, {
     httpOnly: true,
-    secure: false, 
-    sameSite: "strict",
-    maxAge: 0, 
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+    maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
+  });
+};
+const logout = asyncHandler(async (req, res) => {
+  res.cookie('userToken', '', {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+    expires: new Date(0),
   });
 
   res.json({ message: "User logged out successfully" });
