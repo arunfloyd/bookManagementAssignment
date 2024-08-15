@@ -5,14 +5,18 @@ const {
   getBookById,
   updateBook,
   deleteBook,
-  searchBooks
+  searchBooks,
 } = require("../controllers/bookController");
+
+const { upload } = require("../middlewares/multerMiddleware");
+
 const router = express.Router();
 
 router.get("/", getAllBook);
-router.post("/", addBook);
+router.get("/search", searchBooks);
+router.post("/", upload.single("coverImage"), addBook);
 router.delete("/:id", deleteBook);
 router.get("/:id", getBookById);
-router.put("/:id", updateBook);
+router.put("/:id", upload.single("coverImage"), updateBook);
 
 module.exports = router;

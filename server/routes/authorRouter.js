@@ -6,6 +6,7 @@ const {
   updateAuthor,
   deleteAuthor,
 } = require("../controllers/authorController");
+const { authenticateUser } = require("../middlewares/authMiddleware");
 const router = express.Router();
 
 router.get("/", getAllAuthor);

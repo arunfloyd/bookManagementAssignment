@@ -5,7 +5,7 @@ const asyncHandler = require("express-async-handler");
 const addLanguage = asyncHandler(async (req, res) => {
   try {
     const { name, code } = req.body;
-
+    console.log("123", name);
     const existingLanguage = await Language.findOne({
       $or: [{ name }, { code }],
     });
@@ -53,7 +53,6 @@ const getLanguageById = asyncHandler(async (req, res) => {
 const updateLanguage = asyncHandler(async (req, res) => {
   try {
     const { name, code } = req.body;
-
     const existingLanguage = await Language.findOne({
       $or: [{ name }, { code }],
       _id: { $ne: req.params.id },
@@ -94,11 +93,9 @@ const deleteLanguage = asyncHandler(async (req, res) => {
     const bookUsingLanguage = await Book.findOne({ language: req.params.id });
 
     if (bookUsingLanguage) {
-      return res
-        .status(400)
-        .json({
-          message: "Cannot delete language as it is being used by books",
-        });
+      return res.status(400).json({
+        message: "Cannot delete language as it is being used by books",
+      });
     }
 
     await language.deleteOne({ _id: req.params.id });
