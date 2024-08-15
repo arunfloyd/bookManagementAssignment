@@ -1,11 +1,4 @@
-// const Header = () => {
-//   return (
-//     <div className="flex justify-between items-center p-4 bg-gray-800 text-white">
-//       <h1 className="text-2xl">Logo</h1>
-//       <button className="bg-red-500 px-4 py-2 rounded">Logout</button>
-//     </div>
-//   );
-// };
+
 
 import { useNavigate } from "react-router-dom";
 import { API } from "../../utils/Api";
@@ -20,7 +13,7 @@ const Header = () => {
   const handleLogout = async () => {
     await API.logout();
     dispatch(setUserEmail(""));
-    navigate("/");
+    navigate("/login");
   };
   return (
     <header className="bg-white shadow-lg h-16 flex items-center justify-between px-6">

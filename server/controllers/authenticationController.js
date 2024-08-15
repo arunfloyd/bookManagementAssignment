@@ -20,9 +20,9 @@ const login = asyncHandler(async (req, res) => {
 const logout = asyncHandler(async (req, res) => {
   res.cookie("userToken", "", {
     httpOnly: true,
-    secure: false, // Set to true if using HTTPS
+    secure: false, 
     sameSite: "strict",
-    maxAge: 0, // Set maxAge to 0 to expire the cookie immediately
+    maxAge: 0, 
   });
 
   res.json({ message: "User logged out successfully" });
@@ -32,8 +32,7 @@ const newPassword = asyncHandler(async (req, res) => {
   const { password } = req.body;
   console.log(password, "pass");
 
-  // Assuming user identification is handled, e.g., via a token
-  const user = await User.findOne(); // Find the user based on identification (e.g., user ID)
+  const user = await User.findOne(); 
 
   if (!user) {
     return res.status(401).json({ message: "User not found" });
@@ -51,13 +50,10 @@ const newPassword = asyncHandler(async (req, res) => {
 const signup = asyncHandler(async (req, res) => {
   const { name, email, password } = req.body;
 
-  // Check if the user already exists
-
-  // Hash the password using bcrypt
+  
   const saltRounds = 10;
   const hashedPassword = await bcrypt.hash(password, saltRounds);
 
-  // Create a new user
   const user = await User.create({
     name,
     email,

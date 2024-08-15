@@ -46,7 +46,6 @@ const Login = () => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-900">
       <div className="absolute">
-        {/* Background image can be added here */}
       </div>
       <form
         onSubmit={(e) => e.preventDefault()}

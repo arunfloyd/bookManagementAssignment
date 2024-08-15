@@ -21,7 +21,7 @@ const sendOtp = asyncHandler(async (req, res) => {
 
     const otps = new Otp({
       otp: encryptedOtp,
-      expiresAt: new Date(Date.now() + 5 * 60 * 1000), // 59 seconds
+      expiresAt: new Date(Date.now() + 5 * 60 * 1000), 
       user: emailId,
     });
 
@@ -49,7 +49,6 @@ const sendOtp = asyncHandler(async (req, res) => {
 
     await sendEmail(email);
 
-    // Schedule the deletion of the OTP after 59 seconds
     setTimeout(async () => {
       try {
         await Otp.findByIdAndDelete(savedOtp._id);
@@ -99,7 +98,6 @@ const verifyOtp = asyncHandler(async (req, res) => {
       return res.status(400).send("Invalid OTP");
     }
 
-    // Find the most recent OTP (assuming you are saving only one OTP)
     const storedOtp = await Otp.findOne().sort({ createdAt: -1 });
 
     if (!storedOtp) {

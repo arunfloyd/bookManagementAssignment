@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { API } from "../../utils/Api";
+import { Link } from "react-router-dom";
 
 const Home = () => {
   const [listOfBooks, setListOfBooks] = useState([]);
@@ -28,7 +29,7 @@ const Home = () => {
   useEffect(() => {
     loadTheBooks();
   }, [searchQuery, sortField, sortOrder]);
-  
+
   const handleSearch = (e) => {
     setSearchQuery(e.target.value);
   };
@@ -56,7 +57,6 @@ const Home = () => {
         Welcome to our Bookstore!
       </h1>
 
-      {/* Search and Sort Controls */}
       <div className="relative z-10 flex space-x-4 mb-8">
         <input
           type="text"
@@ -73,7 +73,7 @@ const Home = () => {
         </select>
       </div>
 
-      <div className="relative z-10 grid grid-cols-3 gap-8 p-8">
+      <div className="relative z-10 grid grid-cols-1 md:grid-cols-3 gap-8 p-8">
         {listOfBooks.length > 0 ? (
           listOfBooks.map((book) => (
             <div
@@ -102,6 +102,12 @@ const Home = () => {
           <p>No books available</p>
         )}
       </div>
+
+      <Link to={"/login"} className="relative z-10 mt-auto mb-4">
+        <p className="text-white bg-blue-600 px-4 py-2 rounded-full hover:bg-blue-700 transition-colors duration-300">
+          Admin Login
+        </p>
+      </Link>
     </div>
   );
 };

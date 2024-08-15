@@ -11,14 +11,12 @@ const addBook = asyncHandler(async (req, res) => {
     const coverImage = req.file ? req.file.path : null;
     console.log(coverImage, 2);
 
-    // Check if book already exists
     const bookExists = await Book.findOne({ name });
     if (bookExists) {
       return res.status(400).json({ message: "Book already exists" });
     }
     console.log(3);
 
-    // Upload image to Cloudinary
     let result;
     try {
       result = await cloudinary.uploader.upload(req.file.path);
@@ -31,7 +29,6 @@ const addBook = asyncHandler(async (req, res) => {
       });
     }
 
-    // Log the data before creation
     console.log(
       {
         name,
@@ -109,7 +106,6 @@ const updateBook = asyncHandler(async (req, res) => {
       return res.status(404).json({ message: "Book not found" });
     }
 
-    // Check if updated name and author combination already exists
     if (name !== book.name || author !== book.author.toString()) {
       const bookExists = await Book.findOne({
         name,
@@ -124,13 +120,12 @@ const updateBook = asyncHandler(async (req, res) => {
       }
     }
 
-    // Upload new cover image to Cloudinary if coverImage has changed
     if (coverImage) {
       let result;
       try {
         result = await cloudinary.uploader.upload(coverImage);
         console.log(result, "Image uploaded to Cloudinary");
-        book.coverImage = result.secure_url; // Update the book's coverImage with the Cloudinary URL
+        book.coverImage = result.secure_url; 
       } catch (uploadError) {
         console.error("Error during Cloudinary upload:", uploadError);
         return res.status(500).json({
@@ -140,7 +135,6 @@ const updateBook = asyncHandler(async (req, res) => {
       }
     }
 
-    // Update book fields
     book.name = name;
     book.author = author;
     book.description = description;
@@ -182,18 +176,15 @@ const searchBooks = asyncHandler(async (req, res) => {
     const limit = parseInt(req.query.limit) || 10;
     const skip = (page - 1) * limit;
 
-    // Define sort order
     const sort = {};
     if (sortField && sortOrder) {
       sort[sortField] = sortOrder === 'desc' ? -1 : 1;
     } else {
-      // Default sort by price ascending
       sort.price = 1;
     }
 
     let filter = {};
 
-    // Apply search query if available
     if (query) {
       filter = {
         $or: [
@@ -205,7 +196,6 @@ const searchBooks = asyncHandler(async (req, res) => {
 
     console.log("Initial Filter:", JSON.stringify(filter, null, 2));
 
-    // Find books that match the name, description, author name, or language name
     let books = await Book.aggregate([
       {
         $lookup: {
@@ -251,13 +241,11 @@ const searchBooks = asyncHandler(async (req, res) => {
 
     console.log("Books found:", books.length);
 
-    // Apply pagination
     const total = books.length;
     books = books.slice(skip, skip + limit);
 
     console.log("Sample book:", JSON.stringify(books[0], null, 2));
 
-    // Return paginated and sorted results
     res.json({
       books: books,
       currentPage: page,
@@ -272,41 +260,6 @@ const searchBooks = asyncHandler(async (req, res) => {
 
 
 
-// const searchBooks = asyncHandler(async (req, res) => {
-//   try {
-//     const { query } = req.query;
-//     const page = parseInt(req.query.page) || 1;
-//     const limit = parseInt(req.query.limit) || 10;
-//     const skip = (page - 1) * limit;
-
-//     const books = await Book.find({
-//       $or: [
-//         { name: { $regex: query, $options: "i" } },
-//         { description: { $regex: query, $options: "i" } },
-//       ],
-//     })
-//       .populate("author", "name")
-//       .populate("language", "name")
-//       .skip(skip)
-//       .limit(limit);
-
-//     const total = await Book.countDocuments({
-//       $or: [
-//         { name: { $regex: query, $options: "i" } },
-//         { description: { $regex: query, $options: "i" } },
-//       ],
-//     });
-
-//     res.json({
-//       books,
-//       currentPage: page,
-//       totalPages: Math.ceil(total / limit),
-//       totalBooks: total,
-//     });
-//   } catch (error) {
-//     res.status(500).json({ message: "Server Error", error: error.message });
-//   }
-// });
 
 module.exports = {
   addBook,

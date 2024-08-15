@@ -1,145 +1,4 @@
-// import Header from "./Header";
-// import { API } from "../../utils/Api";
-// import { useEffect, useState } from "react";
 
-// const Language = () => {
-//   const [languageList, setLanguageList] = useState([]);
-//   const [isModalOpen, setIsModalOpen] = useState(false);
-//   const [currentLanguage, setCurrentLanguage] = useState({ name: "", code: "" });
-//   const [isEditing, setIsEditing] = useState(false);
-
-//   // Fetches the list of languages
-//   const getLanguageList = async () => {
-//     const response = await API.getAllLanguages();
-//     setLanguageList(response);
-//   };
-
-//   useEffect(() => {
-//     getLanguageList();
-//   }, []);
-
-//   // Deletes a language
-//   const handleDelete = (item) => async () => {
-//     try {
-//       await API.deleteLanguage(item._id);
-//       setLanguageList(languageList.filter((lang) => lang._id !== item._id));
-//     } catch (error) {
-//       console.error(error);
-//     }
-//   };
-
-//   // Opens the modal for editing a language
-//   const handleEdit = (item) => () => {
-//     setCurrentLanguage({ id: item._id, name: item.name, code: item.code });
-//     setIsEditing(true);
-//     setIsModalOpen(true);
-//   };
-
-//   // Opens the modal for adding a new language
-//   const handleAdd = () => {
-//     setCurrentLanguage({ name: "", code: "" });
-//     setIsEditing(false);
-//     setIsModalOpen(true);
-//   };
-
-//   // Saves the language (add or edit)
-//   const handleSave = async () => {
-//     if (isEditing) {
-//       await API.updateLanguage(currentLanguage);
-//     } else {
-//       await API.addLanguage(currentLanguage);
-//     }
-//     setIsModalOpen(false);
-//     getLanguageList();
-//   };
-
-//   return (
-//     <div className="">
-//       {/* <Sidebar /> */}
-//       <div className="flex-1">
-//         <Header />
-//         <div className="p-4">
-//           <h2 className="text-2xl mb-4">Languages</h2>
-//           <button
-//             className="mb-4 px-4 py-2 bg-blue-500 text-white rounded"
-//             onClick={handleAdd}
-//           >
-//             Add Language
-//           </button>
-//           <ul>
-//             {languageList &&
-//               languageList.map((item, index) => (
-//                 <li key={index} className="mb-2 flex justify-between items-center">
-//                   <span>
-//                     {item.name} ({item.code})
-//                   </span>
-//                   <div>
-//                     <button
-//                       className="ml-2 px-2 py-1 bg-green-500 text-white rounded"
-//                       onClick={handleEdit(item)}
-//                     >
-//                       Edit
-//                     </button>
-//                     <button
-//                       className="ml-2 px-2 py-1 bg-red-500 text-white rounded"
-//                       onClick={handleDelete(item)}
-//                     >
-//                       Delete
-//                     </button>
-//                   </div>
-//                 </li>
-//               ))}
-//           </ul>
-//         </div>
-//       </div>
-
-//       {/* Modal */}
-//       {isModalOpen && (
-//         <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50">
-//           <div className="bg-white p-6 rounded shadow-lg w-96">
-//             <h3 className="text-lg mb-4">
-//               {isEditing ? "Edit Language" : "Add Language"}
-//             </h3>
-//             <input
-//               className="mb-2 p-2 border rounded w-full"
-//               type="text"
-//               placeholder="Name"
-//               value={currentLanguage.name}
-//               onChange={(e) =>
-//                 setCurrentLanguage({ ...currentLanguage, name: e.target.value })
-//               }
-//             />
-//             <input
-//               className="mb-2 p-2 border rounded w-full"
-//               type="text"
-//               placeholder="Code"
-//               value={currentLanguage.code}
-//               onChange={(e) =>
-//                 setCurrentLanguage({ ...currentLanguage, code: e.target.value })
-//               }
-//             />
-//             <div className="flex justify-end">
-//               <button
-//                 className="px-4 py-2 bg-gray-500 text-white rounded mr-2"
-//                 onClick={() => setIsModalOpen(false)}
-//               >
-//                 Cancel
-//               </button>
-//               <button
-//                 className="px-4 py-2 bg-blue-500 text-white rounded"
-//                 onClick={handleSave}
-//               >
-//                 Save
-//               </button>
-//             </div>
-//           </div>
-//         </div>
-//       )}
-//     </div>
-//   );
-// };
-
-// export default Language;
 
 
 import Header from "./Header";
@@ -155,7 +14,6 @@ const Language = () => {
   const [languageToDelete, setLanguageToDelete] = useState(null);
   const [statusMessage, setStatusMessage] = useState("");
 
-  // Fetches the list of languages
   const getLanguageList = async () => {
     const response = await API.getAllLanguages();
     setLanguageList(response);
@@ -165,13 +23,11 @@ const Language = () => {
     getLanguageList();
   }, []);
 
-  // Opens delete confirmation popup
   const handleDeleteConfirm = (item) => {
     setLanguageToDelete(item);
     setIsDeleteConfirmOpen(true);
   };
 
-  // Deletes a language after confirmation
   const handleDelete = async () => {
     try {
       await API.deleteLanguage(languageToDelete._id);
@@ -186,21 +42,18 @@ const Language = () => {
     }
   };
 
-  // Opens the modal for editing a language
   const handleEdit = (item) => {
     setCurrentLanguage({ id: item._id, name: item.name, code: item.code });
     setIsEditing(true);
     setIsModalOpen(true);
   };
 
-  // Opens the modal for adding a new language
   const handleAdd = () => {
     setCurrentLanguage({ name: "", code: "" });
     setIsEditing(false);
     setIsModalOpen(true);
   };
 
-  // Saves the language (add or edit)
   const handleSave = async () => {
     try {
       if (isEditing) {
@@ -274,7 +127,6 @@ const Language = () => {
         </div>
       </div>
 
-      {/* Add/Edit Modal */}
       {isModalOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50">
           <div className="bg-white p-6 rounded-lg shadow-xl w-full max-w-md">
@@ -317,7 +169,6 @@ const Language = () => {
         </div>
       )}
 
-      {/* Delete Confirmation Modal */}
       {isDeleteConfirmOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50">
           <div className="bg-white p-6 rounded-lg shadow-xl w-full max-w-md">

@@ -84,7 +84,6 @@ const deleteAuthor = asyncHandler(async (req, res) => {
       return res.status(404).json({ message: "Author not found" });
     }
 
-    // Check if any books are associated with this author
     const booksByAuthor = await Book.findOne({ author: req.params.id });
 
     if (booksByAuthor) {

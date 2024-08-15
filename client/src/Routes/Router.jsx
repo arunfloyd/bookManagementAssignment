@@ -4,14 +4,18 @@ import Language from "../components/admin/Language";
 import Author from "../components/admin/Author";
 import Book from "../components/admin/Book";
 import Login from "../components/admin/Login";
-import PrivateRoute from "./PrivateRoute"; // Make sure to adjust the import path
+import PrivateRoute from "./PrivateRoute";
 import NotFound from "../components/NotFound";
-import VerifyOtp from "../components/admin/VerifyOtp"; // Make sure to adjust the"
+import VerifyOtp from "../components/admin/VerifyOtp";
 import NewPassword from "../components/admin/NewPassword";
 import Home from "../components/user/Home";
 const appRouter = createBrowserRouter([
   {
     path: "/",
+    element: <Home />,
+  },
+  {
+    path: "/login",
     element: <Login />,
   },
   {
@@ -22,13 +26,10 @@ const appRouter = createBrowserRouter([
     path: "/newPassword",
     element: <NewPassword />,
   },
-  {
-    path: "/home",
-    element: <Home />,
-  },
+
   {
     path: "/",
-    element: <PrivateRoute />, 
+    element: <PrivateRoute />,
     children: [
       {
         path: "/dashboard",

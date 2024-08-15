@@ -16,7 +16,7 @@ const NewPassword = () => {
 
     try {
       await API.newPassword({ password });
-      navigate("/");
+      navigate("/login");
     } catch (err) {
       setErrorMessage("Password update failed. Please try again.");
       console.log(err);

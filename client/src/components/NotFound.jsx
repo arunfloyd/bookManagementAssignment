@@ -1,4 +1,3 @@
-// src/components/NotFound.js
 
 import { useNavigate } from "react-router-dom";
 
@@ -6,7 +5,7 @@ const NotFound = () => {
   const navigate = useNavigate();
 
   const handleGoBack = () => {
-    navigate(-1); // Navigate to the previous page
+    navigate(-1); 
   };
 
   return (

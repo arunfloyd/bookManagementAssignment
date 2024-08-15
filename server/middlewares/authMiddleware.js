@@ -10,12 +10,11 @@ const authenticateUser = asyncHandler(async (req, res, next) => {
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
       const userId = decoded.userId;
 
-      // Fetch the user without the password field
       const user = await User.findById(userId).select("-password");
 
       if (user) {
-        req.user = user; // Attach user to the request object
-        next(); // Proceed to the next middleware or route handler
+        req.user = user; 
+        next();
       } else {
         res.status(401);
         throw new Error("Unauthorized user: User not found");

@@ -21,7 +21,6 @@ const Author = () => {
     setAuthorList(response);
   };
 
-  // Deletes an author after confirmation
   const handleDelete = async () => {
     try {
       await API.deleteAuthor(authorToDelete._id);
@@ -36,27 +35,23 @@ const Author = () => {
     }
   };
 
-  // Opens delete confirmation popup
   const handleDeleteConfirm = (author) => {
     setAuthorToDelete(author);
     setIsDeleteConfirmOpen(true);
   };
 
-  // Opens the modal for editing an author
   const handleEdit = (author) => () => {
     setCurrentAuthor({ id: author._id, name: author.name });
     setIsEditing(true);
     setIsModalOpen(true);
   };
 
-  // Opens the modal for adding a new author
   const handleAdd = () => {
     setCurrentAuthor({ name: "" });
     setIsEditing(false);
     setIsModalOpen(true);
   };
 
-  // Saves the author (add or edit)
   const handleSave = async () => {
     try {
       if (isEditing) {
@@ -92,7 +87,6 @@ const Author = () => {
             {statusMessage}
           </div>
         )}
-        {/* Table-like structure using grid */}
         <div className="overflow-x-auto">
           <div className="min-w-full bg-white shadow-md rounded-lg">
             <div className="grid grid-cols-2 gap-4 border-b border-gray-200 bg-gray-50 p-4 font-bold">
@@ -124,7 +118,6 @@ const Author = () => {
           </div>
         </div>
 
-        {/* Modal */}
         {isModalOpen && (
           <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50">
             <div className="bg-white p-6 rounded shadow-lg w-96">
@@ -158,7 +151,6 @@ const Author = () => {
           </div>
         )}
 
-        {/* Delete Confirmation Modal */}
         {isDeleteConfirmOpen && (
           <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50">
             <div className="bg-white p-6 rounded-lg shadow-xl w-full max-w-md">
